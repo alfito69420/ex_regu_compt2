@@ -82,6 +82,26 @@ app.post("/mediana", (req, res) => {
   return res.status(200).json({ mediana: mediana });
 });
 
+// Ruta POST para calcular la media (promedio)
+app.post("/media", (req, res) => {
+  // Obtener el conjunto de números del cuerpo de la solicitud
+  const numeros = req.body.numeros;
+
+  // Verificar si se proporcionaron números
+  if (!numeros || !Array.isArray(numeros) || numeros.length === 0) {
+      return res.status(400).json({ error: "Se requiere un conjunto de números." });
+  }
+
+  // Calcular la suma de los números
+  const suma = numeros.reduce((acc, num) => acc + num, 0);
+
+  // Calcular la media (promedio)
+  const media = suma / numeros.length;
+
+  // Enviar la media como respuesta JSON
+  return res.status(200).json({ media: media });
+});
+
 
 app.get("/hello", (req, res, next) => {
   return res.status(200).json({
