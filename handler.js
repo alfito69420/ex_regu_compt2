@@ -48,7 +48,7 @@ function calcularMediana(numeros) {
   }
 }
 
-// Ruta POST para calcular la moda
+// Ruta para calcular la moda
 app.post("/moda", (req, res) => {
   // Obtener el conjunto de números del cuerpo de la solicitud
   const numeros = req.body.numeros;
@@ -65,7 +65,7 @@ app.post("/moda", (req, res) => {
   return res.status(200).json({ moda: moda });
 });
 
-// Ruta POST para calcular la mediana
+// Ruta para calcular la mediana
 app.post("/mediana", (req, res) => {
   // Obtener el conjunto de números del cuerpo de la solicitud
   const numeros = req.body.numeros;
@@ -82,7 +82,7 @@ app.post("/mediana", (req, res) => {
   return res.status(200).json({ mediana: mediana });
 });
 
-// Ruta POST para calcular la media (promedio)
+// Ruta para calcular la media (promedio)
 app.post("/media", (req, res) => {
   // Obtener el conjunto de números del cuerpo de la solicitud
   const numeros = req.body.numeros;
@@ -101,6 +101,30 @@ app.post("/media", (req, res) => {
   // Enviar la media como respuesta JSON
   return res.status(200).json({ media: media });
 });
+
+// Ruta POST para calcular la varianza
+app.post("/varianza", (req, res) => {
+  // Obtener el conjunto de números del cuerpo de la solicitud
+  const numeros = req.body.numeros;
+
+  // Verificar si se proporcionaron números
+  if (!numeros || !Array.isArray(numeros) || numeros.length === 0) {
+      return res.status(400).json({ error: "Se requiere un conjunto de números." });
+  }
+
+  // Calcular la media (promedio)
+  const media = numeros.reduce((acc, num) => acc + num, 0) / numeros.length;
+
+  // Calcular la suma de los cuadrados de las diferencias con la media
+  const sumaCuadradosDiferencias = numeros.reduce((acc, num) => acc + Math.pow(num - media, 2), 0);
+
+  // Calcular la varianza como la suma de los cuadrados de las diferencias dividida por el número de elementos
+  const varianza = sumaCuadradosDiferencias / numeros.length;
+
+  // Enviar la varianza como respuesta JSON
+  return res.status(200).json({ varianza: varianza });
+});
+
 
 
 app.get("/hello", (req, res, next) => {
