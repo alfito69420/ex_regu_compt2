@@ -30,6 +30,24 @@ function calcularModa(numeros) {
   return moda;
 }
 
+// Función para calcular la mediana de un conjunto de números
+function calcularMediana(numeros) {
+  // Ordenar los números de menor a mayor
+  numeros.sort((a, b) => a - b);
+
+  const cantidadNumeros = numeros.length;
+  // Verificar si la cantidad de números es impar
+  if (cantidadNumeros % 2 !== 0) {
+      // Si es impar, la mediana es el número en el medio
+      return numeros[Math.floor(cantidadNumeros / 2)];
+  } else {
+      // Si es par, la mediana es el promedio de los dos números del medio
+      const medio1 = numeros[cantidadNumeros / 2 - 1];
+      const medio2 = numeros[cantidadNumeros / 2];
+      return (medio1 + medio2) / 2;
+  }
+}
+
 // Ruta POST para calcular la moda
 app.post("/moda", (req, res) => {
   // Obtener el conjunto de números del cuerpo de la solicitud
@@ -46,6 +64,24 @@ app.post("/moda", (req, res) => {
   // Enviar la moda como respuesta JSON
   return res.status(200).json({ moda: moda });
 });
+
+// Ruta POST para calcular la mediana
+app.post("/mediana", (req, res) => {
+  // Obtener el conjunto de números del cuerpo de la solicitud
+  const numeros = req.body.numeros;
+
+  // Verificar si se proporcionaron números
+  if (!numeros || !Array.isArray(numeros) || numeros.length === 0) {
+      return res.status(400).json({ error: "Se requiere un conjunto de números." });
+  }
+
+  // Calcular la mediana
+  const mediana = calcularMediana(numeros);
+
+  // Enviar la mediana como respuesta JSON
+  return res.status(200).json({ mediana: mediana });
+});
+
 
 app.get("/hello", (req, res, next) => {
   return res.status(200).json({
