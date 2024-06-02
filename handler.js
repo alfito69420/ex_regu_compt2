@@ -1,10 +1,39 @@
 const serverless = require("serverless-http");
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require('cors');
 const app = express();
+
+const corsOptions = {
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+  allowedHeaders: 'Content-Type,Authorization',
+  exposedHeaders: 'Content-Length, X-Kuma-Revision, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset'
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
+
+//app.use(cors());
+//app.options("*", cors());
 
 // Middleware para parsear el cuerpo de la solicitud como JSON
 app.use(bodyParser.json());
+
+// Middleware para habilitar CORS
+/* app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+
+  // Aquí se configuran los encabezados expuestos
+  res.header("Access-Control-Expose-Headers", "Content-Length, X-Kuma-Revision, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset");
+
+  next();
+}); */
 
 // Función para calcular la moda de un conjunto de números
 function calcularModa(numeros) {
